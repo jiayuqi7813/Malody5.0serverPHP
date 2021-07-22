@@ -153,6 +153,15 @@ $num = sizeof($row);
 echo '<div class="container">
 ';
 for($i=0;$i<=$num-1;$i++){
+    $sql1 = 'SELECT
+    *
+    FROM
+    charts
+    WHERE
+    charts.sid = '.$row[$i]['sid'].'
+    ';
+    $row2 = searchSql($sql1);
+    $nums = sizeof($row2);
     echo '
     <div class="col-sm-6 col-md-3">
     <div class="thumbnail" >
@@ -160,6 +169,7 @@ for($i=0;$i<=$num-1;$i++){
         <div class="caption">
             <h3>'.$row[$i]["title"].'</h3>
             <p>sid:'.$row[$i]['sid'].'</p>
+            <p>铺面数量：'.$nums.'</p>
             <p><a href="/admin.php/cat?sid='.$row[$i]['sid'].'" class="btn btn-primary" role="button">查看</a> <a href="#" class="btn btn-default" role="button">编辑</a></p>
         </div>
     </div>
