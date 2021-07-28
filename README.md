@@ -12,14 +12,6 @@ apache2或者nginx均可
 
 附带了malody.sql,新建malody数据库，将其导入即可，内部有一测试用的数据。
 
-测试用数据替换指令，
-
-update `items` set `file` = replace(file, '127.0.0.1', 'ip');
-
-如图所示
-
-![image-20210727002508200](/README.assets/image-20210727002508200-1627316837687-1627316842213.png)
-
 需要更改内容：
 
 config.php
@@ -29,12 +21,6 @@ config.php
 username，password改为你的数据库密码，
 
 ip改为服务器的公网ip，本地的话就不用动
-
-index.php
-
-![image-20210720215438841](/README.assets/image-20210720215438841.png)
-
-同理，ip改为服务器公网，本地无需改动
 
 admin.php
 

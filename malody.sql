@@ -56,15 +56,15 @@ CREATE TABLE `items` (
 -- ----------------------------
 -- Records of items
 -- ----------------------------
-INSERT INTO `items` VALUES ('39909', 'Sterelogue (4ky_hyper).mc', '8e1c3a73fa7f73dfc49daf47fb477903', 'http://127.0.0.1/file/_song_9106_/39909/Sterelogue (4ky_hyper).mc');
-INSERT INTO `items` VALUES ('39909', 'VeetaCrush - Sterelogue.jpg', '2e8eb54209aaf60bc506a0532f36537d', 'http://127.0.0.1/file/_song_9106_/39909/VeetaCrush - Sterelogue.jpg');
-INSERT INTO `items` VALUES ('39909', 'VeetaCrush - Sterelogue.ogg', 'f271a1797b0b826a301bb6a043fef302', 'http://127.0.0.1/file/_song_9106_/39909/VeetaCrush - Sterelogue.ogg');
-INSERT INTO `items` VALUES ('39730', 'Sterelogue (4ky_alterego).mc', 'ada8280deab4c13193994256530c2d08', 'http://127.0.0.1/file/_song_9106_/39730/Sterelogue (4ky_alterego).mc');
-INSERT INTO `items` VALUES ('40546', 'Sterelogue (ring_easy).mc', 'a2c66337793a66833f9a4cf4ce71504e', 'http://127.0.0.1/file/_song_9106_/40546/Sterelogue (ring_easy).mc');
-INSERT INTO `items` VALUES ('40546', 'VeetaCrush - Sterelogue.jpg', '2e8eb54209aaf60bc506a0532f36537d', 'http://127.0.0.1/file/_song_9106_/40546/VeetaCrush - Sterelogue.jpg');
-INSERT INTO `items` VALUES ('40546', 'VeetaCrush - Sterelogue.ogg', 'f271a1797b0b826a301bb6a043fef302', 'http://127.0.0.1/file/_song_9106_/40546/VeetaCrush - Sterelogue.ogg');
-INSERT INTO `items` VALUES ('39730', 'VeetaCrush - Sterelogue.jpg', '2e8eb54209aaf60bc506a0532f36537d', 'http://127.0.0.1/file/_song_9106_/39730/VeetaCrush - Sterelogue.jpg');
-INSERT INTO `items` VALUES ('39730', 'VeetaCrush - Sterelogue.ogg', 'f271a1797b0b826a301bb6a043fef302', 'http://127.0.0.1/file/_song_9106_/39730/VeetaCrush - Sterelogue.ogg');
+INSERT INTO `items` VALUES ('39909', 'Sterelogue (4ky_hyper).mc', '8e1c3a73fa7f73dfc49daf47fb477903', '/file/_song_9106_/39909/Sterelogue (4ky_hyper).mc');
+INSERT INTO `items` VALUES ('39909', 'VeetaCrush - Sterelogue.jpg', '2e8eb54209aaf60bc506a0532f36537d', '/file/_song_9106_/39909/VeetaCrush - Sterelogue.jpg');
+INSERT INTO `items` VALUES ('39909', 'VeetaCrush - Sterelogue.ogg', 'f271a1797b0b826a301bb6a043fef302', '/file/_song_9106_/39909/VeetaCrush - Sterelogue.ogg');
+INSERT INTO `items` VALUES ('39730', 'Sterelogue (4ky_alterego).mc', 'ada8280deab4c13193994256530c2d08', '/file/_song_9106_/39730/Sterelogue (4ky_alterego).mc');
+INSERT INTO `items` VALUES ('40546', 'Sterelogue (ring_easy).mc', 'a2c66337793a66833f9a4cf4ce71504e', '/file/_song_9106_/40546/Sterelogue (ring_easy).mc');
+INSERT INTO `items` VALUES ('40546', 'VeetaCrush - Sterelogue.jpg', '2e8eb54209aaf60bc506a0532f36537d', '/file/_song_9106_/40546/VeetaCrush - Sterelogue.jpg');
+INSERT INTO `items` VALUES ('40546', 'VeetaCrush - Sterelogue.ogg', 'f271a1797b0b826a301bb6a043fef302', '/file/_song_9106_/40546/VeetaCrush - Sterelogue.ogg');
+INSERT INTO `items` VALUES ('39730', 'VeetaCrush - Sterelogue.jpg', '2e8eb54209aaf60bc506a0532f36537d', '/file/_song_9106_/39730/VeetaCrush - Sterelogue.jpg');
+INSERT INTO `items` VALUES ('39730', 'VeetaCrush - Sterelogue.ogg', 'f271a1797b0b826a301bb6a043fef302', '/file/_song_9106_/39730/VeetaCrush - Sterelogue.ogg');
 
 -- ----------------------------
 -- Table structure for songlist
@@ -85,7 +85,7 @@ CREATE TABLE `songlist` (
 -- ----------------------------
 -- Records of songlist
 -- ----------------------------
-INSERT INTO `songlist` VALUES ('9106', 'http://127.0.0.1/file/_song_9106_/39909/VeetaCrush - Sterelogue.jpg', '152', '202', 'Sterelogue', 'VeetaCrush', '0', '1624200505');
+INSERT INTO `songlist` VALUES ('9106', '/file/_song_9106_/39909/VeetaCrush - Sterelogue.jpg', '152', '202', 'Sterelogue', 'VeetaCrush', '0', '1624200505');
 
 -- ----------------------------
 -- Table structure for waitlist
