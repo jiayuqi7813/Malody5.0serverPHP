@@ -1,9 +1,9 @@
 <?php
 header("content-Type: text/html; charset=utf-8");
-include('config.php');//还是改成include吧，这样至少能在错误发生时及时拦下来而不是继续错误执行
+include('config.php');
 error_reporting(E_ALL^E_NOTICE);//关闭警报
 
-$ip = '127.0.0.1';  //主机ip地址
+global $ip;
 $allow_wj = 'jpg,png,jpeg,mc,mcz,ogg,mp3'; //合法后缀名
 $allow = explode(',', $allow_wj);
 $modes= 0;                              //模式
@@ -54,9 +54,11 @@ function route($uri, Closure $_route)                   //路由
 }
 
 route('/index.php/api/store/list', function () {        //歌曲列表查询api
+    global $ip;
     global $conn;
     $word = $_GET['word'];
     $from = $_GET["from"];
+    $arrayip = array();
     $page_size = 80;    //单页最大歌曲数量
     $sql = "SELECT COUNT( * ) AS amount FROM songlist";
     $row = foundSql($sql);
@@ -100,6 +102,12 @@ route('/index.php/api/store/list', function () {        //歌曲列表查询api
     }
     $ret = mysqli_query($conn, $sql);
     $result = mysqli_fetch_all($ret, MYSQLI_ASSOC);
+    #var_dump($result);
+
+    for($i=0;$i<=sizeof($result)-1;$i++){
+        $result[$i]['cover']='http://'.$ip.''.$result[$i]['cover']; 
+    }
+    #var_dump($result);
     $jsres= json_encode($result, JSON_UNESCAPED_SLASHES);
     $prj = '{"code": 0,"hasMore": true,"next": 0,"data": '.$jsres.'}';
     print_r($prj);
@@ -126,6 +134,7 @@ route(
 route(
     '/index.php/api/store/download',
     function () {        //谱面下载api
+        global $ip;
     if (isset($_GET["cid"])) {//是否存在"cid"的参数
         $cid = $_GET["cid"];
         //文件对应查询
@@ -151,6 +160,9 @@ route(
         charts.cid = '.$cid.';';
 
         $result = searchSql($sql);
+        for($i=0;$i<=sizeof($result)-1;$i++){
+            $result[$i]['file']='http://'.$ip.''.$result[$i]['file']; 
+        }
         if (empty($result)) {
             echo '{"code":-2}';
         } else {
@@ -201,7 +213,7 @@ route('/index.php/api/store/upload/sign', function () {
         }
         for ($i=0;$i<=$num-1;$i++) {
             if($flag){
-                $file = 'http://'.$ip.'/file/_song_'.$sid.'_/'.$cid.'/'.$namey[$i];
+                $file = '/file/_song_'.$sid.'_/'.$cid.'/'.$namey[$i];
         
                 $sql = "INSERT INTO `malody`.`items` (
                    `cid` ,
@@ -256,7 +268,7 @@ route('/index.php/api/store/upload/finish', function () {        //三阶段验�
         for($i=0;$i<=$num-1;$i++){
             //判断后缀，执行对应操作
             if(substr($namey[$i], strrpos($namey[$i], '.')+1) == 'jpg'|substr($namey[$i], strrpos($namey[$i], '.')+1) == 'png'|substr($namey[$i], strrpos($namey[$i], '.')+1) == 'jpeg'){
-                $cover = 'http://'.$ip.'/file/_song_'.$sid.'_/'.$cid.'/'.$namey[$i];
+                $cover = '/file/_song_'.$sid.'_/'.$cid.'/'.$namey[$i];
                 continue;
             }
             if(substr($namey[$i], strrpos($namey[$i], '.')+1) == 'mc'){

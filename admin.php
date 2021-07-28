@@ -117,7 +117,7 @@ route('/admin.php', function () {
 route('/admin.php/manage', function () {
     global $adminkey;
     if(@$_SESSION['login'] != md5($adminkey)){
-        echo '<script>window.location.href="/admin.php";</script>';
+        header('location:/admin.php');
     }
     config1();
         print <<<EOT
@@ -186,7 +186,7 @@ route('/admin.php/wait', function () {
     global $modes;
     global $adminkey;
     if(@$_SESSION['login'] != md5($adminkey)){
-        echo '<script>window.location.href="/admin.php";</script>';
+        header('location:/admin.php');
     }
     config1();
         print <<<EOT
@@ -267,7 +267,7 @@ route('/admin.php/stable', function () {
     global $modes;
     global $adminkey;
     if(@$_SESSION['login'] != md5($adminkey)){
-        echo '<script>window.location.href="/admin.php";</script>';
+        header('location:/admin.php');
     }
     config1();
         print <<<EOT
@@ -338,7 +338,7 @@ route('/admin.php/cat', function () {//查看语句
     global $modes;
     global $types;
     if(@$_SESSION['login'] != md5($adminkey)){
-        echo '<script>window.location.href="/admin.php";</script>';
+        header('location:/admin.php');
     }
     config1();
     
@@ -387,7 +387,7 @@ route('/admin.php/ok', function () {
     error_reporting(0);
     global $adminkey;
     if(@$_SESSION['login'] != md5($adminkey)){
-        echo '<script>window.location.href="/admin.php";</script>';
+        header('location:/admin.php');
     }
     config1();
     if(isset($_POST['cid'])){
@@ -407,7 +407,7 @@ route('/admin.php/ok', function () {
 route('/admin.php/edit', function () {
     global $adminkey;
     if(@$_SESSION['login'] != md5($adminkey)){
-        echo '<script>window.location.href="/admin.php";</script>';
+        header('location:/admin.php');
     }
     config1();
     error_reporting(0);
@@ -451,7 +451,7 @@ route('/admin.php/delete', function () {
     global $ip;
     global $adminkey;
     if(@$_SESSION['login'] != md5($adminkey)){
-        echo '<script>window.location.href="/admin.php";</script>';
+        header('location:/admin.php');
     }
     config1();
     
@@ -485,7 +485,7 @@ route('/admin.php/del', function () {
     global $ip;
     global $adminkey;
     if(@$_SESSION['login'] != md5($adminkey)){
-        echo '<script>window.location.href="/admin.php";</script>';
+        header('location:/admin.php');
     }
     config1();
     
