@@ -2,7 +2,7 @@
 header("content-Type: text/html; charset=utf-8");
 include('config.php');
 error_reporting(E_ALL^E_NOTICE);//关闭警报
-
+global $status;
 global $ip;
 $allow_wj = 'jpg,png,jpeg,mc,mcz,ogg,mp3'; //合法后缀名
 $allow = explode(',', $allow_wj);
@@ -253,6 +253,7 @@ route('/index.php/api/store/upload/sign', function () {
 route('/index.php/api/store/upload/finish', function () {        //三阶段验证
     require 'mp3time.php';
     global $ip;
+    global $status;
     $cover = '';
     $level = 1;
     if (isset($_POST['sid']) && isset($_POST['cid'])) {
@@ -292,7 +293,7 @@ route('/index.php/api/store/upload/finish', function () {        //三阶段验�
         $sql1 = "INSERT INTO `malody`.`songlist` (`sid`, `cover`, `length`, `bpm`, `title`, `artist`, `mode`, `time`) VALUES 
         ('$sid', '$cover', '$length', '$bpm', '$title', '$artist', '$mode', '$time')";
         $result = searchSql($sql1);
-        $sql2 = "INSERT INTO `malody`.`waitlist` (`sid`, `cid`, `uid`, `creator`, `version`, `level`, `type`, `size`,`mode`) VALUES 
+        $sql2 = "INSERT INTO `malody`.`$status` (`sid`, `cid`, `uid`, `creator`, `version`, `level`, `type`, `size`,`mode`) VALUES 
         ('$sid', '$cid', '0', '$creator', '$version', '$level', '0', '$size','$mode');";
         $result = searchSql($sql2);
         echo '{"code": 0}';

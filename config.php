@@ -5,6 +5,8 @@ $username = "root";
 $password = "root";
 $mysql_database = "malody";
 $ip = '127.0.0.1';
+$status = 'waitlist';
+#$status = 'charts';
  
 // 创建连接
 
