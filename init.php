@@ -66,7 +66,7 @@ else if(isset($_GET['submited'])){
                                 )');
     mysqli_close($connect);
     echo '创建完成，将在3秒后跳转到公告页<br>';
-    echo '如果没有跳转，请点击<a href="/">这里</a>跳转。'
+    echo '如果没有跳转，请点击<a href="/">这里</a>跳转。';
     echo "<script>setTimeout(\"window.location.href='/'\",3000)</script>";
     die();
 }
