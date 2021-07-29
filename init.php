@@ -18,7 +18,7 @@ else if(isset($_GET['submited'])){
     file_put_contents('config.php', $text);
 
     $adminss = file_get_contents('admin.php');
-    $adminss = str_replace('$adminkey = "123";', $_GET['admin']);
+    $adminss = str_replace('$adminkey = "123";', '$adminkey = "'.$_GET['admin'].'";', $adminss);
     file_put_contents('admin.php', $adminss);
 
     $connect = mysqli_connect($_GET['host1'], $_GET['name'], $_GET['pwd']);
