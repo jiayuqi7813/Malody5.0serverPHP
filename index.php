@@ -2,6 +2,10 @@
 header("content-Type: text/html; charset=utf-8");
 include('config.php');
 error_reporting(E_ALL^E_NOTICE);//关闭警报
+global $init;
+if($init == 'true'){
+    header('location:/init.php');
+}
 global $status;
 global $ip;
 $allow_wj = 'jpg,png,jpeg,mc,mcz,ogg,mp3'; //合法后缀名

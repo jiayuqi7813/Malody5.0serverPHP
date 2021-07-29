@@ -1,5 +1,5 @@
 <?php
-
+$init = 'true';
 $servername = "localhost";
 $username = "root";
 $password = "root";
@@ -10,24 +10,30 @@ $status = 'waitlist';
  
 // 创建连接
 
-$conn = mysqli_connect($servername, $username, $password, $mysql_database);
+
 
 function searchSql($sql)
 {
-    global $conn;
-    #$s = mysqli_connect($servername, $username, $password, $mysql_database);
+    global $servername;
+    global $username;
+    global $password;
+    global $mysql_database;
+    $conn = mysqli_connect($servername, $username, $password, $mysql_database);
     $ret = mysqli_query($conn, $sql);
+    mysqli_close($conn);
     return mysqli_fetch_all($ret, MYSQLI_ASSOC);
 }
 
 function foundSql($sql)
 {
-    global $conn;
-    #$s = mysqli_connect($servername, $username, $password, $mysql_database);
+    global $servername;
+    global $username;
+    global $password;
+    global $mysql_database;
+    $conn = mysqli_connect($servername, $username, $password, $mysql_database);
     $ret = mysqli_query($conn, $sql);
+    mysqli_close($conn);
     return mysqli_fetch_array($ret, MYSQLI_ASSOC);
 }
-
-
 
 ?>
