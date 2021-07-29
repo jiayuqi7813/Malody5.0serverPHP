@@ -6,41 +6,19 @@ php>=7.4
 
 mysql >=5.7
 
-推荐apache2，nginx存在admin.php无法使用的问题（原因未知。
+apache2或者nginx均可
 
 ### 搭建文档：
 
-#### 一键搭建：
-
-新增docker一键部署，直接在当前目录docker-compose up -d即可
-
-访问url后
-
-![image-20210729220716457](/README.assets/image-20210729220716457.png)
-
-按图配置，后面两个内容自定义，随后点击提交即可。
-
-### 手动搭建
-
-init.php作为一键配置功能，首次访问会自动进入，按需配置即可
-
-后续所需更改功能
-
 需要更改内容：
 
-config.php
-
-![image-20210720215314296](/README.assets/image-20210720215314296.png)
+网站搭建完成后直接访问主域名，进入初次配置页面
 
 username，password改为你的数据库密码，
 
-ip改为服务器的公网ip，本地的话就不用动
+ip改为服务器的公网ip，本地的话就填写127.0.0.1
 
-admin.php
-
-![image-20210720215516729](/README.assets/image-20210720215516729.png)
-
-adminkey改为你需要的密码，用于后台管理员登录。
+MySQL如果是和网站在同一个服务器搭建，也填写127.0.0.1，否则应填写网络地址
 
 ### 游戏内使用：
 
@@ -62,11 +40,13 @@ adminkey改为你需要的密码，用于后台管理员登录。
 
 谱面上传后进入待审核页面，管理员通过后才进入正式谱面中。
 
-首次进入会通过导航页配置选择，后续需要更改，将config.php中
+如需测试更改，将index.php中的
 
-![image-20210729221041172](C:\Users\Snowywar\Desktop\1234\README.assets\image-20210729221041172.png)
+![image-20210720215939272](README.assets/image-20210720215939272.png)
 
-此处进行更改即可，waitlist代表需要审核，charts代表无需审核。
+waitlist改为charts即可
+
+
 
 ### 已知安全性问题：
 
@@ -79,8 +59,6 @@ adminkey改为你需要的密码，用于后台管理员登录。
 建议：如果需要部署在公网做一个私有服务器，最好上个waf，推荐云盾，宝塔，安全狗都可以
 
 ### DoList
-
-- [x] docker一键部署
 
 - [ ] admin翻页功能
 - [ ] 活动页面
