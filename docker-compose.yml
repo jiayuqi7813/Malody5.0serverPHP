@@ -1,0 +1,11 @@
+version: '2'
+services:
+  web:
+    image: maphp
+    restart: always
+    build: .
+    ports:
+      - "8001:80"
+    environment:
+      - TZ="Asia/Shanghai"
+      - LANG=en_US.UTF-8

@@ -6,11 +6,25 @@ php>=7.4
 
 mysql >=5.7
 
-apache2或者nginx均可
+推荐apache2，nginx存在admin.php无法使用的问题（原因未知。
 
 ### 搭建文档：
 
-附带了malody.sql,新建malody数据库，将其导入即可，内部有一测试用的数据。
+#### 一键搭建：
+
+新增docker一键部署，直接在当前目录docker-compose up -d即可
+
+访问url后
+
+![image-20210729220716457](/README.assets/image-20210729220716457.png)
+
+按图配置，后面两个内容自定义，随后点击提交即可。
+
+### 手动搭建
+
+init.php作为一键配置功能，首次访问会自动进入，按需配置即可
+
+后续所需更改功能
 
 需要更改内容：
 
@@ -48,13 +62,11 @@ adminkey改为你需要的密码，用于后台管理员登录。
 
 谱面上传后进入待审核页面，管理员通过后才进入正式谱面中。
 
-如需测试更改，将index.php中的
+首次进入会通过导航页配置选择，后续需要更改，将config.php中
 
-![image-20210720215939272](README.assets/image-20210720215939272.png)
+![image-20210729221041172](C:\Users\Snowywar\Desktop\1234\README.assets\image-20210729221041172.png)
 
-waitlist改为charts即可
-
-
+此处进行更改即可，waitlist代表需要审核，charts代表无需审核。
 
 ### 已知安全性问题：
 
@@ -67,6 +79,8 @@ waitlist改为charts即可
 建议：如果需要部署在公网做一个私有服务器，最好上个waf，推荐云盾，宝塔，安全狗都可以
 
 ### DoList
+
+- [x] docker一键部署
 
 - [ ] admin翻页功能
 - [ ] 活动页面
