@@ -6,12 +6,16 @@ global $init;
 if($init == 'true'){
     header('location:/init.php');
 }
+global $servername;
+global $username;
+global $password;
+global $mysql_database;
 global $status;
 global $ip;
 $allow_wj = 'jpg,png,jpeg,mc,mcz,ogg,mp3'; //合法后缀名
 $allow = explode(',', $allow_wj);
 $modes= 0;                              //模式
-
+$conn = mysqli_connect($servername, $username, $password, $mysql_database);
 //用于格式化array数组，方便调试
 function dump($vars, $label = '', $return = false) {
     if (ini_get('html_errors')) {
