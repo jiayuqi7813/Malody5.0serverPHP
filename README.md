@@ -65,7 +65,7 @@ adminkey改为你需要的密码，用于后台管理员登录。
 
 首次进入会通过导航页配置选择，后续需要更改，将config.php中
 
-![image-20210729221041172](C:\Users\Snowywar\Desktop\1234\README.assets\image-20210729221041172.png)
+![image-20210729221041172](README.assets\image-20210729221041172.png)
 
 此处进行更改即可，waitlist代表需要审核，charts代表无需审核。
 
