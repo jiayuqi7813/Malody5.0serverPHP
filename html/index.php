@@ -139,6 +139,23 @@ route(
 }
 );
 
+//有bug，等修复
+route('/index.php/api/store/promote',   //推荐谱面列表
+    function () {        
+        global $ip;
+        $sql = 'SELECT * FROM charts';
+        $result = searchSql($sql);
+        #for($i=0;$i<=sizeof($result)-1;$i++){
+        #    $result[$i]['cover']='http://'.$ip.''.$result[$i]['cover']; 
+        #}
+        $jsres= json_encode($result, JSON_UNESCAPED_SLASHES);
+        $prj = '{"code": 0,"hasMore": true,"next": 0,"data": '.$jsres.'}';
+        print_r($prj);
+
+}
+);
+
+
 route(
     '/index.php/api/store/download',
     function () {        //谱面下载api
