@@ -104,6 +104,14 @@ adminkey改为你需要的密码，用于后台管理员登录。
 
 ### 版本更新日志：
 
-date:2021-8-16
-version:0.21
+date:2021-8-17  
+
+version:0.22  
+
+--更新/index.php/api/store/info路由，展示当前版本
+
+date:2021-8-16  
+
+version:0.21  
+
 --更新了promote的路由，即铺面推荐，具体还无法正常工作，等待客户端修复bug

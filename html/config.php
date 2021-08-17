@@ -1,5 +1,5 @@
 <?php
-#version: 0.21
+#version: 0.22
 $init = 'true';
 $servername = "localhost";
 $username = "root";

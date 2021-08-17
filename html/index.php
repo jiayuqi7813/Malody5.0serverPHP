@@ -61,6 +61,23 @@ function route($uri, Closure $_route)                   //路由
     }
 }
 
+
+route('/index.php/api/store/info',   //兼容api
+    function () {        
+        print_r('{
+            "code": 0,
+            "data":{
+              "api": 202108
+              "min": 202103
+              "welcome": "welcome to maphp v0.22"
+            }
+          }
+          ');
+
+}
+);
+
+
 route('/index.php/api/store/list', function () {        //歌曲列表查询api
     global $ip;
     global $conn;
