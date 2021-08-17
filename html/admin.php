@@ -248,7 +248,7 @@ echo '
     #var_dump($row);
     for($i=0;$i<=sizeof($row)-1;$i++){
         echo '
-        <tr><td>'.$row[$i]['sid'].'</td><td>'.$row[$i]['cid'].'</td><td>'.$row[$i]['creator'].'</td><td>'.$row[$i]['version'].'</td><td>'.$row[$i]['title'].'</td><td>'.$modes[$row[$i]['mode']].'</td><td>
+        <tr><td>'.$row[$i]['sid'].'</td><td>'.$row[$i]['cid'].'</td><td>'.$row[$i]['creator'].'</td><td>'.urldecode($row[$i]['version']).'</td><td>'.$row[$i]['title'].'</td><td>'.$modes[$row[$i]['mode']].'</td><td>
         <form method="post" action="/admin.php/ok">
         <input type="text" name="cid" hidden value="'.$row[$i]['cid'].'"/>
         <input class="btn btn-link" type="submit" value="通过" />
@@ -334,6 +334,7 @@ for($i=0;$i<=sizeof($row)-1;$i++){
 });
 
 route('/admin.php/cat', function () {//查看语句
+    error_reporting(0);
     global $adminkey;
     global $modes;
     global $types;
@@ -353,6 +354,15 @@ route('/admin.php/cat', function () {//查看语句
         WHERE
         charts.sid = '.$sid.'
         ';
+        $sql1 = 'CREATE TABLE tmp AS (SELECT DISTINCT * FROM charts)';
+        $sql2 = 'DELETE FROM charts';
+        $sql3 = 'INSERT INTO charts SELECT * FROM tmp';
+        $sql4 = 'DROP TABLE tmp';
+        searchSql($sql1);
+        searchSql($sql2);
+        searchSql($sql3);
+        searchSql($sql4);
+
         echo '
     
     <style type="text/css">
@@ -366,12 +376,13 @@ route('/admin.php/cat', function () {//查看语句
     <table class="tftable" border="1">
     <th>cid</th><th>creator</th><th>version</th><th>mode</th><th>type</th><th>edit</th></tr>
    ';
+        
         $row = searchSql($sql);
         #var_dump($row);
         //输出
     for($i=0;$i<=sizeof($row)-1;$i++){
             echo '
-            <tr><td>'.$row[$i]['cid'].'</td><td>'.$row[$i]['creator'].'</td><td>'.$row[$i]['version'].'</td><td>'.$modes[$row[$i]['mode']].'</td><td>'.$types[$row[$i]['type']].'</td><td><form method="post" action="/admin.php/edit">
+            <tr><td>'.$row[$i]['cid'].'</td><td>'.$row[$i]['creator'].'</td><td>'.urldecode($row[$i]['version']).'</td><td>'.$modes[$row[$i]['mode']].'</td><td>'.$types[$row[$i]['type']].'</td><td><form method="post" action="/admin.php/edit">
             <input type="text" name="cid" hidden value="'.$row[$i]['cid'].'"/>
             <input type="text" name="sid" hidden value="'.$row[$i]['sid'].'"/>
             <input class="btn btn-link" type="submit" value="编辑" />

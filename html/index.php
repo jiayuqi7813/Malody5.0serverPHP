@@ -16,7 +16,29 @@ $allow_wj = 'jpg,png,jpeg,mc,mcz,ogg,mp3'; //合法后缀名
 $allow = explode(',', $allow_wj);
 $modes= 0;                              //模式
 $conn = mysqli_connect($servername, $username, $password, $mysql_database);
+
+//文件复制
+function copy_file($filename,$dest){
+    //检测$dest是否是目录并且这个目录是否存在，不存在则创建
+    if(!is_dir($dest)){
+      mkdir($dest,0777,true);
+    }
+    $destName=$dest.DIRECTORY_SEPARATOR.basename($filename);
+    //检测目标路径下是否存在同名文件
+    if(file_exists($destName)){
+      return false;
+    }
+    //拷贝文件
+    if(copy($filename,$destName)){
+      return true;
+    }
+    return false;
+  }
+
+
+
 //用于格式化array数组，方便调试
+
 function dump($vars, $label = '', $return = false) {
     if (ini_get('html_errors')) {
         $content = "<pre>\n";
@@ -32,6 +54,7 @@ function dump($vars, $label = '', $return = false) {
     echo $content;
     return null;
   }
+
 
 //截取文件后缀函数+判断，用法get_file_suffix('文件名',$allow)
 function get_file_suffix($file_name, $allow_type = array())
@@ -61,7 +84,6 @@ function route($uri, Closure $_route)                   //路由
     }
 }
 
-
 route('/index.php/api/store/info',   //兼容api
     function () {        
         print_r('{
@@ -76,7 +98,6 @@ route('/index.php/api/store/info',   //兼容api
 
 }
 );
-
 
 route('/index.php/api/store/list', function () {        //歌曲列表查询api
     global $ip;
@@ -134,7 +155,12 @@ route('/index.php/api/store/list', function () {        //歌曲列表查询api
     }
     #var_dump($result);
     $jsres= json_encode($result, JSON_UNESCAPED_SLASHES);
-    $prj = '{"code": 0,"hasMore": true,"next": 0,"data": '.$jsres.'}';
+    if(sizeof($result)<$page_size){
+        $prj = '{"code": 0,"hasMore": false,"next": 0,"data": '.$jsres.'}';
+    }else{
+        $prj = '{"code": 0,"hasMore": true,"next": 0,"data": '.$jsres.'}';
+
+    }
     print_r($prj);
 
 });
@@ -146,8 +172,11 @@ route(
     if (isset($_GET["sid"])) {//是否存在"sid"的参数
         $sid = $_GET["sid"];
         $sql = 'SELECT songlist.sid,charts.cid,charts.uid,charts.creator, charts.version, charts.level,charts.type, charts.size,charts.mode FROM songlist , charts WHERE songlist.sid = charts.sid AND songlist.sid ='.$sid.';';
-        $result = searchSql($sql);
-        $jsres= json_encode($result, JSON_UNESCAPED_SLASHES);
+        $result1 = searchSql($sql);
+        for($i=0;$i<=sizeof($result1)-1;$i++){
+            $result1[$i]['version'] = urldecode($result1[$i]['version']);
+        }
+        $jsres= json_encode($result1, JSON_UNESCAPED_SLASHES);
         $prj = '{"code": 0,"hasMore": true,"next": 0,"data": '.$jsres.'}';
         print_r($prj);
     } else {
@@ -171,6 +200,31 @@ route('/index.php/api/store/promote',   //推荐谱面列表
 
 }
 );
+
+
+//有bug，等修复
+route('/index.php/api/store/events',   //推荐谱面列表
+    function () {        
+        print_r('{
+            "code": 0,
+            "hasMore": true,
+            "next": 0,
+            "data": [
+              {
+                "eid": 0,
+                "name": "test",
+                "start": "2021-08-11",
+                "end": "2021-08-28",
+                "active": true,
+                "cover": "http://127.0.0.1/file/_song_9106_/39909/VeetaCrush%20-%20Sterelogue.jpg",
+              }
+            ]
+          }
+          ');
+
+}
+);
+
 
 
 route(
@@ -299,6 +353,7 @@ route('/index.php/api/store/upload/finish', function () {        //三阶段验�
     global $conn;
     $cover = '';
     $level = 1;
+    
     if (isset($_POST['sid']) && isset($_POST['cid'])) {
         $sid = $_POST['sid'];
         $cid = $_POST['cid'];
@@ -309,10 +364,15 @@ route('/index.php/api/store/upload/finish', function () {        //三阶段验�
         $namey = explode(",", $name);
         $hashy = explode(",", $hash);
         $num = count($namey);
+        $dir2 = './file/_song_'.$sid.'_/'.$cid.'/';
+        $dir2 = str_replace(PHP_EOL, '', $dir2);
+        
         for($i=0;$i<=$num-1;$i++){
             //判断后缀，执行对应操作
             if(substr($namey[$i], strrpos($namey[$i], '.')+1) == 'jpg'|substr($namey[$i], strrpos($namey[$i], '.')+1) == 'png'|substr($namey[$i], strrpos($namey[$i], '.')+1) == 'jpeg'){
-                $cover = '/file/_song_'.$sid.'_/'.$cid.'/'.$namey[$i];
+                $cover = '/pic/'.$namey[$i];
+                $finalfile = $dir2.$namey[$i];
+                copy_file($finalfile,'pic');
                 continue;
             }
             if(substr($namey[$i], strrpos($namey[$i], '.')+1) == 'mc'){
@@ -320,7 +380,8 @@ route('/index.php/api/store/upload/finish', function () {        //三阶段验�
                 $json_string = file_get_contents($file_mine);
                 $data = json_decode(trim($json_string,chr(239).chr(187).chr(191)),true);
                 $creator = $data['meta']['creator'];
-                $version = $data['meta']['version'];
+                $version1 = $data['meta']['version'];
+                $version = urlencode($version1);
                 $mode = $data['meta']['mode'];
                 $time = $data['meta']['time'];
                 $title = $data['meta']['song']['title'];
