@@ -101,8 +101,10 @@ date:2021-8-18  (未推送，先把readme推出来，等admin.php关于events写
 
 version:0.24  
 
---更新/index.php/api/store/events路由，可以写入活动
---更新/index.php/api/store/event路由，可以写入活动谱面
+--更新/index.php/api/store/events路由，可以写入活动  
+
+--更新/index.php/api/store/event路由，可以写入活动谱面  
+
 --修复谱面数据库无法获取上传者uid的bug
   
   
