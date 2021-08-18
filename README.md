@@ -97,6 +97,16 @@ adminkey改为你需要的密码，用于后台管理员登录。
 
 ### 版本更新日志：
 
+date:2021-8-18  (未推送，先把readme推出来，等admin.php关于events写好的)
+
+version:0.24  
+
+--更新/index.php/api/store/events路由，可以写入活动
+--更新/index.php/api/store/event路由，可以写入活动谱面
+--修复谱面数据库无法获取上传者uid的bug
+  
+  
+
 date:2021-8-17  
 
 version:0.23  
@@ -105,7 +115,6 @@ version:0.23
 --修复谱面删除时cover也随之删除  
 --修复谱面无限刷新的问题  
 --修复部分不可见字符导致谱面上传后无法正确写入数据库的问题  
-
 --修复出现同数据的谱面时全部显示的问题
 
 date:2021-8-16  
