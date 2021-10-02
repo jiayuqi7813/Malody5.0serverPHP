@@ -34,4 +34,5 @@ if(!is_dir($dir2)){
         move_uploaded_file($tmpfile,$str);
         echo $finalfile;
     }
+    
 ?>

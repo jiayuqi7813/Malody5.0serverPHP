@@ -1,6 +1,5 @@
 <?php
-#version: 0.23
-$init = 'true';
+$init = 'false';
 $servername = "localhost";
 $username = "root";
 $password = "root";

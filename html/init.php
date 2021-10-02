@@ -29,10 +29,10 @@ else if(isset($_GET['submited'])){
     file_put_contents('admin.php', $adminss);
 
     $connect = mysqli_connect($_GET['host1'], $_GET['name'], $_GET['pwd']);
-    mysqli_query($connect, 'CREATE DATABASE malody');
+    mysqli_query($connect, 'CREATE DATABASE IF NOT EXISTS malody');
     mysqli_close($connect);
     $connect = mysqli_connect($_GET['host1'], $_GET['name'], $_GET['pwd'], 'malody');
-    mysqli_query($connect, 'CREATE TABLE `charts` (
+    mysqli_query($connect, 'CREATE TABLE IF NOT EXISTS `charts` (
                                 `sid` int(255) NOT NULL,
                                 `cid` int(255) NOT NULL,
                                 `uid` int(255) NOT NULL,
@@ -43,13 +43,13 @@ else if(isset($_GET['submited'])){
                                 `size` int(255) NOT NULL,
                                 `mode` int(1) NOT NULL
                             )');
-    mysqli_query($connect, 'CREATE TABLE `items` (
+    mysqli_query($connect, 'CREATE TABLE IF NOT EXISTS `items` (
                                 `cid` int(255) NOT NULL,
                                 `name` text NOT NULL,
                                 `hash` char(32) NOT NULL,
                                 `file` text NOT NULL
                             )');
-    mysqli_query($connect, 'CREATE TABLE `songlist` (
+    mysqli_query($connect, 'CREATE TABLE IF NOT EXISTS `songlist` (
                                 `sid` int(6) NOT NULL,
                                 `cover` text NOT NULL,
                                 `length` int(6) NOT NULL,
@@ -60,7 +60,7 @@ else if(isset($_GET['submited'])){
                                 `time` bigint(20) NOT NULL,
                                 PRIMARY KEY (`sid`)
                                 )');
-    mysqli_query($connect, 'CREATE TABLE `waitlist` (
+    mysqli_query($connect, 'CREATE TABLE IF NOT EXISTS `waitlist` (
                                 `sid` int(255) NOT NULL,
                                 `cid` int(255) NOT NULL,
                                 `uid` int(255) NOT NULL,
@@ -69,6 +69,31 @@ else if(isset($_GET['submited'])){
                                 `level` text NOT NULL,
                                 `type` int(1) NOT NULL,
                                 `size` int(255) NOT NULL,
+                                `mode` int(1) NOT NULL
+                                )');
+    mysqli_query($connect,'CREATE TABLE IF NOT EXISTS `events` (
+                                `eid` int(255) NOT NULL,
+                                `name` varchar(255) NOT NULL,
+                                `sponsor` varchar(255) NOT NULL,
+                                `start` date NOT NULL,
+                                `end` date NOT NULL,
+                                `active` varchar(255) NOT NULL,
+                                `cover` varchar(255) NOT NULL
+                                )');
+    mysqli_query($connect,'CREATE TABLE IF NOT EXISTS `event` (
+                                `eid` int(255) NOT NULL,
+                                `sid` int(255) NOT NULL,
+                                `cid` int(255) NOT NULL,
+                                `uid` int(255) NOT NULL,
+                                `creator` text NOT NULL,
+                                `title` text NOT NULL,
+                                `artist` text NOT NULL,
+                                `version` text NOT NULL,
+                                `level` text NOT NULL,
+                                `length` text,
+                                `type` int(1) NOT NULL,
+                                `cover` text NOT NULL,
+                                `time` text NOT NULL,
                                 `mode` int(1) NOT NULL
                                 )');
     mysqli_close($connect);

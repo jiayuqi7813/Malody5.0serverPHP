@@ -138,6 +138,9 @@ route('/admin.php/manage', function () {
                     <li id='stable' class="">
                         <a href="/admin.php/stable">stable管理</a>
                     </li>
+                    <li id='events' class="">
+                        <a href="/admin.php/events">活动管理</a>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -170,7 +173,7 @@ for($i=0;$i<=$num-1;$i++){
             <h3>'.$row[$i]["title"].'</h3>
             <p>sid:'.$row[$i]['sid'].'</p>
             <p>铺面数量：'.$nums.'</p>
-            <p><a href="/admin.php/cat?sid='.$row[$i]['sid'].'" class="btn btn-primary" role="button">查看</a> <a href="#" class="btn btn-default" role="button">编辑</a></p>
+            <p><a href="/admin.php/cat?sid='.$row[$i]['sid'].'" class="btn btn-primary" role="button">查看</a> <!--<a href="#" class="btn btn-default" role="button">编辑</a>--></p>
         </div>
     </div>
     </div>
@@ -206,6 +209,9 @@ route('/admin.php/wait', function () {
                     </li>
                     <li id='stable' class="">
                         <a href="/admin.php/stable">stable管理</a>
+                    </li>
+                    <li id='events' class="">
+                        <a href="/admin.php/events">活动管理</a>
                     </li>
                 </ul>
             </div>
@@ -288,6 +294,9 @@ route('/admin.php/stable', function () {
                     <li id='stable' class="active">
                         <a href="#">stable管理</a>
                     </li>
+                    <li id='events' class="">
+                        <a href="/admin.php/events">活动管理</a>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -332,6 +341,222 @@ for($i=0;$i<=sizeof($row)-1;$i++){
 }
 
 });
+
+//活动管理
+route('/admin.php/events', function () {
+    global $adminkey;
+    if(@$_SESSION['login'] != md5($adminkey)){
+        header('location:/admin.php');
+    }
+    config1();
+        print <<<EOT
+        <body>
+     <div class="container">
+        <div class="row">
+            <div class="span12">
+                <h3 class="text-center">
+                    malody服务器后端管理
+                </h3>
+                <ul class="nav nav-tabs">
+                    <li class="" id='manage'>
+                        <a href="/admin.php/manage">铺面管理</a>
+                    </li>
+                    <li id='wait' class ="">
+                        <a href="/admin.php/wait">待审核</a>
+                    </li>
+                    <li id='stable' class="">
+                        <a href="/admin.php/stable">stable管理</a>
+                    </li>
+                    <li id='events' class="active">
+                        <a href="#">活动管理</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+
+EOT;
+echo '<div class="container">';
+echo '<h4 class="container"contenteditable="">活动列表:</h4>';
+echo'<a href="/admin.php/newevents" class="btn btn-primary pull-right" role="button">新增活动</a>';
+global $conn;
+$sql = "SELECT * FROM events";
+$row = searchSql($sql);
+$num = sizeof($row);
+echo '<div class="container">
+';
+for($i=0;$i<=$num-1;$i++){
+    $sql1 = 'SELECT
+    *
+    FROM
+    events
+    WHERE
+    events.eid = '.$row[$i]['eid'].'
+    ';
+    $row2 = searchSql($sql1);
+    $nums = sizeof($row2);
+    echo '
+    <div class="col-sm-6 col-md-3">
+    <div class="thumbnail" >
+        <img src="'.$row[$i]["cover"].'" class="img-responsive" onload="DrawImage(this)" >
+        <div class="caption">
+            <h3>'.$row[$i]["name"].'</h3>
+            <p>active:'.$row[$i]['active'].'</p>
+            <p>sponsor:'.$row[$i]['sponsor'].'</p>
+            <p>'.$row[$i]['start'].'——'.$row[$i]['end'].'</p>
+            <p><a href="" class="btn btn-primary" role="button">编辑</a> <a href="/admin.php/events/del?eid='.$row[$i]['eid'].'" class="btn btn-danger" role="button">删除</a></p>
+        </div>
+    </div>
+    </div>
+';
+}
+echo'</div></div>';
+#var_dump($row);
+
+
+});
+
+
+route('/admin.php/events/del', function () {
+    error_reporting(0);
+    global $adminkey;
+    if(@$_SESSION['login'] != md5($adminkey)){
+        header('location:/admin.php');
+    }
+    config1();
+    if(isset($_GET['eid'])){
+        $eid = $_GET['eid'];
+        $sql = 'DELETE FROM `malody`.`events` WHERE  `eid`='.$eid.' LIMIT 1';
+        searchSql($sql);
+        echo "<script>alert('删除成功');parent.location.href='/admin.php/events'; </script>";
+    }
+    else{
+        echo "<script>alert('参数错误');parent.location.href='/admin.php/events'; </script>";
+    }
+
+});
+
+route('/admin.php/newevents', function () {
+    global $adminkey;
+    
+    error_reporting(0);
+    if(@$_SESSION['login'] != md5($adminkey)){
+        header('location:/admin.php');
+    }
+    $name = $_GET['name'];
+    $sponsor = $_GET['sponsor'];
+    $start = $_GET['start'];
+    $end = $_GET['end'];
+    $cover = $_GET['cover'];
+    $sql = 'SELECT max(`events`.eid) FROM `events`';
+    $row = searchSql($sql);
+    $eid = number_format($row[0]['max(`events`.eid)']) +1; #自增eid
+    #新增数据库
+    $sql1 = "INSERT INTO `malody`.`events` (`eid`, `name`, `sponsor`, `start`, `end`, `active`, `cover`) VALUES ('$eid', '$name', '$sponsor', '$start', '$end', 'true', '$cover')";
+    searchSql($sql1);
+    $sql2 = 'SELECT max(`events`.eid) FROM `events`';
+    $row2 = searchSql($sql2);
+    #硬核判断
+    if($row2[0]['max(`events`.eid)']>$row[0]['max(`events`.eid)']){
+        echo "<script> alert('sucess');parent.location.href='/admin.php/events'; </script>";
+    }else{
+        NONE;
+    }
+
+    config1();
+    print <<<EOT
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.bootcss.com/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.js"></script>
+    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdn.bootcss.com/moment.js/2.24.0/moment-with-locales.js"></script>
+   <script src="https://cdn.bootcss.com/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
+    <title>新增活动</title>
+</head>
+
+<body>
+    <div style="text-align: center;">
+        <h3>活动新增页面</h3>
+        <form action="/admin.php/newevents" method="GET">
+            <input type="hidden" name="submited" value="1">
+            <br>
+                <input type="text"  class="form-control" placeholder="活动标题" name="name">
+                <br>
+                <input type="text"  class="form-control" placeholder="活动发起人" name="sponsor">
+                <br>
+                
+            <h4>活动日期</h4>
+            <div class="container-fluid" style="text-align: center;">
+            <div class='col-sm-6'>
+                <div class="form-group">
+                    <label>选择开始时间：</label>
+                    <!--指定 date标记-->
+                    <div class='input-group date' id='datetimepicker1'>
+                        <input type='text' class="form-control" name="start" />
+                        <span class="input-group-addon">
+                            <span class="glyphicon glyphicon-calendar"></span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class='col-sm-6'>
+                <div class="form-group">
+                    <label>选择结束时间：</label>
+                    <!--指定 date标记-->
+                    <div class='input-group date' id='datetimepicker2'>
+                        <input type='text' class="form-control" name="end"/>
+                        <span class="input-group-addon">
+                            <span class="glyphicon glyphicon-calendar"></span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <input type="text" class="form-control" placeholder="封面路径(eg. /pic/Force.jpg)" name="cover">
+            
+        </div>
+
+        <script type="text/javascript">
+        $(function () {
+            var picker1 = $('#datetimepicker1').datetimepicker({
+                format: 'YYYY-MM-DD',
+                locale: moment.locale('zh-cn'),
+                //minDate: '2016-7-1'
+            });
+            var picker2 = $('#datetimepicker2').datetimepicker({
+                format: 'YYYY-MM-DD',
+                locale: moment.locale('zh-cn')
+            });
+            //动态设置最小值
+            picker1.on('dp.change', function (e) {
+                picker2.data('DateTimePicker').minDate(e.date);
+            });
+            //动态设置最大值
+            picker2.on('dp.change', function (e) {
+                picker1.data('DateTimePicker').maxDate(e.date);
+            });
+        });
+
+        </script>
+
+        
+            <button type="submit">提交</button>
+        
+        </form>
+    </div>
+</body>
+EOT;
+
+
+
+});
+
 
 route('/admin.php/cat', function () {//查看语句
     error_reporting(0);

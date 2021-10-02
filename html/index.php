@@ -1,5 +1,6 @@
 <?php
-header("content-Type: text/html; charset=utf-8");
+#header("content-Type: text/html; ");
+header('content-type:application/json; charset=utf-8');
 include('config.php');
 error_reporting(E_ALL^E_NOTICE);//关闭警报
 global $init;
@@ -84,22 +85,19 @@ function route($uri, Closure $_route)                   //路由
     }
 }
 
-route('/index.php/api/store/info',   //兼容api
-    function () {        
-        print_r('{
-            "code": 0,
-            "data":{
-              "api": 202108
-              "min": 202103
-              "welcome": "welcome to maphp v0.22"
-            }
-          }
-          ');
+
+//api版本说明
+route('/index.php/api/store/info',   
+    function () {   
+        $arr = array('code'=>0,'api'=>202108,'min'=>202103,'welcome'=>"welcome to Malody PHP server!");    
+        echo json_encode($arr);
+
 
 }
 );
 
-route('/index.php/api/store/list', function () {        //歌曲列表查询api
+//歌曲列表查询api
+route('/index.php/api/store/list', function () {        
     global $ip;
     global $conn;
     $word = $_GET['word'];
@@ -156,19 +154,18 @@ route('/index.php/api/store/list', function () {        //歌曲列表查询api
     #var_dump($result);
     $jsres= json_encode($result, JSON_UNESCAPED_SLASHES);
     if(sizeof($result)<$page_size){
-        $prj = '{"code": 0,"hasMore": false,"next": 0,"data": '.$jsres.'}';
+        $prj = '{"code": 0,"hasMore": false,"next": '.($from+1).',"data": '.$jsres.'}';
     }else{
-        $prj = '{"code": 0,"hasMore": true,"next": 0,"data": '.$jsres.'}';
+        $prj = '{"code": 0,"hasMore": true,"next": '.($from+1).',"data": '.$jsres.'}';
 
     }
     print_r($prj);
 
 });
 
-
-route(
-    '/index.php/api/store/charts',
-    function () {        //歌曲下谱面查询api
+//歌曲下谱面查询api
+route('/index.php/api/store/charts',
+    function () {        
     if (isset($_GET["sid"])) {//是否存在"sid"的参数
         $sid = $_GET["sid"];
         $sql = 'SELECT songlist.sid,charts.cid,charts.uid,charts.creator, charts.version, charts.level,charts.type, charts.size,charts.mode FROM songlist , charts WHERE songlist.sid = charts.sid AND songlist.sid ='.$sid.';';
@@ -185,8 +182,8 @@ route(
 }
 );
 
-//有bug，等修复
-route('/index.php/api/store/promote',   //推荐谱面列表
+//推荐谱面列表(有bug，等修复)
+route('/index.php/api/store/promote',   
     function () {        
         global $ip;
         $sql = 'SELECT * FROM charts';
@@ -202,34 +199,45 @@ route('/index.php/api/store/promote',   //推荐谱面列表
 );
 
 
-//有bug，等修复
-route('/index.php/api/store/events',   //推荐谱面列表
+//活动列表(分区)
+route('/index.php/api/store/events',   
     function () {        
-        print_r('{
-            "code": 0,
-            "hasMore": true,
-            "next": 0,
-            "data": [
-              {
-                "eid": 0,
-                "name": "test",
-                "start": "2021-08-11",
-                "end": "2021-08-28",
-                "active": true,
-                "cover": "http://127.0.0.1/file/_song_9106_/39909/VeetaCrush%20-%20Sterelogue.jpg",
-              }
-            ]
-          }
-          ');
+        global $ip;
+        $from = $_GET['from'];
+        $sql = 'select * from events';
+        $result = searchSql($sql);
+        for($i=0;$i<=sizeof($result)-1;$i++){
+            $result[$i]['cover']='http://'.$ip.''.$result[$i]['cover']; 
+        }
+        $jsres= json_encode($result, JSON_UNESCAPED_SLASHES);
+        $prj = '{"code": 0,"hasMore": true,"next":'.($from+1).',"data": '.$jsres.'}';
+        print_r($prj);
 
 }
 );
 
+//活动谱面列表(谱面)
+route('/index.php/api/store/event',   
+    function () {        
+        global $ip;
+        $eid = $_GET['eid'];
+        $from = $_GET['from'];
+        $sql = 'select * from event where eid ='.$eid.'';
+        $result = searchSql($sql);
+        for($i=0;$i<=sizeof($result)-1;$i++){
+            $result[$i]['cover']='http://'.$ip.''.$result[$i]['cover']; 
+            $result[$i]['version'] = urldecode($result[$i]['version']);
+        }
+        $jsres= json_encode($result, JSON_UNESCAPED_SLASHES);
+        $prj = '{"code": 0,"hasMore": true,"next":'.($from+1).',"data": '.$jsres.'}';
+        print_r($prj);
 
+}
+);
 
-route(
-    '/index.php/api/store/download',
-    function () {        //谱面下载api
+//谱面下载api
+route('/index.php/api/store/download',
+    function () {        
         global $ip;
     if (isset($_GET["cid"])) {//是否存在"cid"的参数
         $cid = $_GET["cid"];
@@ -277,6 +285,7 @@ route(
 }
 );
 
+//文件上传验证
 route('/index.php/api/store/upload/sign', function () {
     global $ip;
     global $allow;
@@ -345,8 +354,8 @@ route('/index.php/api/store/upload/sign', function () {
     }
 });
 
-
-route('/index.php/api/store/upload/finish', function () {        //三阶段验证
+//三阶段验证
+route('/index.php/api/store/upload/finish', function () {        
     require 'mp3time.php';
     global $ip;
     global $status;
@@ -355,6 +364,7 @@ route('/index.php/api/store/upload/finish', function () {        //三阶段验�
     $level = 1;
     
     if (isset($_POST['sid']) && isset($_POST['cid'])) {
+        $uid = $_GET['uid'];
         $sid = $_POST['sid'];
         $cid = $_POST['cid'];
         $name = $_POST['name'];
@@ -398,7 +408,7 @@ route('/index.php/api/store/upload/finish', function () {        //三阶段验�
         ('$sid', '$cover', '$length', '$bpm', '$title', '$artist', '$mode', '$time')";
         $result = searchSql($sql1);
         $sql2 = "INSERT INTO `malody`.`$status` (`sid`, `cid`, `uid`, `creator`, `version`, `level`, `type`, `size`,`mode`) VALUES 
-        ('$sid', '$cid', '0', '$creator', '$version', '$level', '0', '$size','$mode');";
+        ('$sid', '$cid', '$uid', '$creator', '$version', '$level', '0', '$size','$mode');";
         $result = searchSql($sql2);
         echo '{"code": 0}';
     }
@@ -410,7 +420,8 @@ route('/index.php/api/store/upload/finish', function () {        //三阶段验�
 
 
 route('/', function () {
-    #echo '<script>alert("跳转中");window.location.href="/index.php/api/store/list";</script>';
+    #可以自定义任何你想要的内容
+    header("Content-type: text/html; charset=utf-8");
     echo"公告栏"."<br>";
     echo"服务器正常运行";
 });

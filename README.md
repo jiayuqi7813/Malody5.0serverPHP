@@ -90,12 +90,28 @@ adminkey改为你需要的密码，用于后台管理员登录。
 - [x] docker一键部署
 
 - [ ] admin翻页功能
-- [ ] 活动页面
+- [x] 活动页面
 - [ ] admin搜索功能
 - [ ] 安全性提高
 
-
 ### 版本更新日志：
+
+**date:2021-10-2**
+
+version:0.25
+
+--新增event和events数据库，通过init.php进行初始化
+
+--admin.php更新活动管理，暂时活动内增加歌曲暂未支持，但是可以进行创建活动与删除活动
+
+--index.php大部分的api相应回包改为json模式
+
+--修复数据库未知的bug
+
+
+
+
+
 
 date:2021-8-18  (未推送，先把readme推出来，等admin.php关于events写好的)
 
@@ -106,7 +122,7 @@ version:0.24
 --更新/index.php/api/store/event路由，可以写入活动谱面  
 
 --修复谱面数据库无法获取上传者uid的bug
-  
+
   
 
 date:2021-8-17  
