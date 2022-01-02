@@ -89,7 +89,7 @@ function route($uri, Closure $_route)                   //路由
 //api版本说明
 route('/index.php/api/store/info',   
     function () {   
-        $arr = array('code'=>0,'api'=>202108,'min'=>202103,'welcome'=>"welcome to Malody PHP server!");    
+        $arr = array('code'=>0,'api'=>202112,'min'=>202103,'welcome'=>"welcome to Malody PHP server!");    
         echo json_encode($arr);
 
 
