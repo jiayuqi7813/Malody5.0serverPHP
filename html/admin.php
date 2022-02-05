@@ -30,7 +30,7 @@ function config1(){ //主页面加载
     <style>
 </style>
     <!--<link href="bootstrap-3.3.7-dist/css/bootstrap.min.css" rel="stylesheet">-->
-    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet">
     <!-- 引入jquery -->
     <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.js"></script>
     <!-- jQThumb缩略图插件 -->
